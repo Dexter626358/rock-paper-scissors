@@ -1,0 +1,83 @@
+# Write your code here
+import random
+score = 0
+win = {
+    'water' : ['scissors', 'fire', 'rock', 'hun', 'lightning', 'devil', 'dragon'],
+    'dragon' : ['snake', 'scissors', 'fire', 'rock', 'gun', 'lightning', 'devil'],
+    'devil' : ['tree', 'human', 'snake', 'scissors', 'fire', 'rock', 'gun'],
+    'gun' : ['wolf', 'tree', 'human', 'snake', 'scissors', 'fire', 'rock'],
+    'rock' : ['sponge', 'wolf', 'tree', 'human', 'snake', 'scissors', 'fire'],
+    'fire' : ['paper', 'sponge', 'wolf', 'tree', 'human', 'snake', 'scissors'],
+    'scissors' : ['air', 'paper', 'sponge', 'wolf', 'tree', 'human', 'snake'],
+    'snake' : ['water', 'air', 'paper', 'sponge', 'wolf', 'tree', 'human'],
+    'human' : ['dragon', 'water', 'air', 'paper', 'sponge', 'wolf', 'tree'],
+    'tree' : ['devil', 'dragon', 'water', 'air', 'paper', 'sponge', 'wolf'],
+    'wolf' : ['lightning', 'devil', 'dragon', 'water', 'air', 'paper', 'sponge'],
+    'sponge' : ['gun', 'lightning', 'devil', 'dragon', 'water', 'air', 'paper'],
+    'paper' : ['rock', 'gun', 'lightning', 'devil', 'dragon', 'water', 'air'],
+    'air' : ['fire', 'rock', 'gun', 'lightning', 'devil', 'dragon', 'water'],
+    'lightning' : ['tree', 'human', 'snake', 'scissors', 'fire', 'rock', 'gun']
+}
+
+def comparison(user_input):
+    global score, choice
+    computer_input = random.choice(choice)
+    if user_input == computer_input:
+        score += 50
+        return print(f"There is a draw ({computer_input})"), score
+    else:
+        if computer_input in win[user_input]:
+            score += 100
+            return print(f"Well done. The computer chose {computer_input} and failed"), score
+        else:
+            return print(f"Sorry, but the computer chose {computer_input}")
+
+def user_rating():
+    global score, user_name
+    dict_rating = {}
+    with open("rating.txt", 'r') as file:
+        rating = file.readlines()
+        for line in rating:
+            list_names = line.rstrip().split(" ")
+            dict_rating[list_names[0]] = int(list_names[1])
+        if user_name in dict_rating:
+            score += dict_rating[user_name]
+        else:
+            score = 0
+    return score
+
+
+user_name = input("Enter your name: ")
+print("Hello,", user_name)
+user_rating()
+game_options = set(input().split(","))
+print("Okay, let's start")
+if game_options == {''}:
+    avalible_input = ['rock', 'paper', 'scissors', '!exit', '!rating']
+    choice = ['rock', 'paper', 'scissors']
+else:
+    avalible_input = list(game_options)
+    choice = list(game_options)
+    avalible_input.append('!exit')
+    avalible_input.append('!rating')
+
+
+
+while True:
+    user_input = input().lower()
+    if user_input not in avalible_input:
+        print('Invalid input')
+        continue
+    else:
+        if user_input == '!exit':
+            print('Bye!')
+            break
+        elif user_input == '!rating':
+            print(f'Your rating: {score}')
+            continue
+        else:
+            comparison(user_input)
+            #print(f'Your rating: {score}')
+
+
+
